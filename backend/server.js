@@ -7,6 +7,7 @@ const router = require("./router");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
+const cors = require("cors");
 
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0-rz9ov.mongodb.net/gambling-picks?retryWrites=true&w=majority`;
 
@@ -20,6 +21,7 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use(morgan("combined"));
+app.use(cors());
 app.use(bodyParser.json({ type: "*/*" }));
 router(app);
 
@@ -27,4 +29,3 @@ const server = http.createServer(app);
 
 server.listen(process.env.PORT);
 console.log("Server listening on: ", process.env.PORT);
-
