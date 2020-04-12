@@ -10,7 +10,11 @@ import thunk from "redux-thunk";
 import App from "./App";
 import reducers from "./reducers";
 
-const store = createStore(reducers, {}, applyMiddleware(thunk));
+const store = createStore(
+  reducers,
+  { auth: { authenticated: localStorage.getItem("token") } },
+  applyMiddleware(thunk)
+);
 
 ReactDOM.render(
   <React.StrictMode>
