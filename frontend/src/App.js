@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
 import SignIn from "./components/auth/SignIn";
@@ -6,17 +6,29 @@ import SignUp from "./components/auth/SignUp";
 import Home from "./components/Home.jsx";
 import Chat from "./components/Chat.jsx";
 import { useSelector } from "react-redux";
+import MyAppBar from "./components/navigation/MyAppBar";
+import MyDrawer from "./components/navigation/MyDrawer";
 
 function App() {
   const authenticated = useSelector((state) => state.auth.authenticated);
 
   const AuthorizedRoutes = () => {
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
+    const toggleDrawer = () => {
+      setDrawerOpen(!drawerOpen);
+    };
+
     return (
-      <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/chat" component={Chat} />
-        <Redirect to="/" />
-      </Switch>
+      <>
+        <MyAppBar toggleDrawer={toggleDrawer} />
+        <MyDrawer drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} />
+        <Switch>
+          <Route path="/" component={Home} exact />
+          <Route path="/chat" component={Chat} />
+          <Redirect to="/" />
+        </Switch>
+      </>
     );
   };
 
