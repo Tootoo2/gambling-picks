@@ -10,6 +10,8 @@ import thunk from "redux-thunk";
 import App from "./App";
 import reducers from "./reducers";
 import { CssBaseline } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core/styles";
+import createMuiTheme from "./ui/theme";
 
 const store = createStore(
   reducers,
