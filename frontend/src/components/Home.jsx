@@ -1,7 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Home = () => {
-  return <div style={{ minHeight: "100%" }}>home</div>;
+  const user = useSelector((state) => state.user);
+  return <div style={{ minHeight: "100%" }}>home{user.username}</div>;
 };
 
 export default Home;

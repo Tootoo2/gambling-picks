@@ -10,6 +10,7 @@ module.exports = function (app) {
   // Authenticaton
   app.post("/signin", requireSignin, Authentication.signin);
   app.post("/signup", Authentication.signup);
+  app.get("/user", Authentication.getUser);
 
   // Message
   app.post("/message", ChatController.postMessage);

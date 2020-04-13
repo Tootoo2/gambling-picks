@@ -15,7 +15,7 @@ exports.signin = function (req, res) {
   });
 };
 
-exports.signup = async (req, res, next) => {
+exports.signup = (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
 
@@ -62,5 +62,18 @@ exports.signup = async (req, res, next) => {
         user: { _id: user._id, username: user.username },
       });
     });
+  });
+};
+
+exports.getUser = (req, res) => {
+  const decoded = jwt.decode(req.headers.authorization, config.secret);
+  User.findById(decoded.sub, (err, user) => {
+    if (err) {
+      return res.status(400).send({ error: "no user found" });
+    }
+    if (user) {
+      return res.status(200).send({ _id: user._id, username: user.username });
+    }
+    return res.status(404).send("Not Found");
   });
 };

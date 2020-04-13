@@ -1,4 +1,4 @@
-import { AUTH_USER, AUTH_FAIL, USER_SIGNOUT } from "./types";
+import { AUTH_USER, AUTH_FAIL, USER_SIGNOUT, FETCH_USER } from "./types";
 
 export const signup = (username, password) => async (dispatch) => {
   const response = await fetch("http://localhost:3090/signup", {
@@ -37,4 +37,23 @@ export const signin = (username, password) => async (dispatch) => {
 export const signout = () => {
   localStorage.removeItem("token");
   return { type: USER_SIGNOUT };
+};
+
+export const fetchUser = () => async (dispatch) => {
+  const response = await fetch("http://localhost:3090/user", {
+    method: "GET",
+    headers: {
+      authorization: localStorage.getItem("token"),
+    },
+  });
+
+  if (!response.ok) {
+    console.log("bad fetch user");
+    return;
+  }
+  const data = await response.json();
+  dispatch({
+    type: FETCH_USER,
+    payload: data,
+  });
 };
