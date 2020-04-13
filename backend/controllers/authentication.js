@@ -15,11 +15,25 @@ exports.signin = function (req, res) {
   });
 };
 
-exports.signup = function (req, res, next) {
+exports.signup = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  User.findOne({ username: username }, function (err, existingUser) {
+  /*await User.find({}, (err) => {
+    if (err) {
+      return next(err);
+    }
+    User.countDocuments({}, (err, count) => {
+      if (err) {
+        return next(err);
+      }
+      if (count >= 10) {
+        return res.status(400).send({ error: "Max amount of users registred" });
+      }
+    });
+	});*/
+
+  User.findOne({ username: username }, (err, existingUser) => {
     if (err) {
       return next(err);
     }
@@ -39,7 +53,7 @@ exports.signup = function (req, res, next) {
       password: password,
     });
 
-    user.save(function (err) {
+    user.save((err) => {
       if (err) {
         return next(err);
       }
