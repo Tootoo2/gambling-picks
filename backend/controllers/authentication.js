@@ -7,9 +7,12 @@ function tokenForUser(user) {
   return jwt.encode({ sub: user._id, iat: timestamp }, config.secret);
 }
 
-exports.signin = function (req, res, next) {
+exports.signin = function (req, res) {
   // User already been auth'd by middleware. We just need to give them a token
-  res.send({ token: tokenForUser(req.user) });
+  res.send({
+    token: tokenForUser(req.user),
+    user: { _id: req.user._id, username: req.user.username },
+  });
 };
 
 exports.signup = function (req, res, next) {
@@ -40,7 +43,10 @@ exports.signup = function (req, res, next) {
       if (err) {
         return next(err);
       }
-      res.json({ token: tokenForUser(user) });
+      res.send({
+        token: tokenForUser(user),
+        user: { _id: user._id, username: user.username },
+      });
     });
   });
 };
