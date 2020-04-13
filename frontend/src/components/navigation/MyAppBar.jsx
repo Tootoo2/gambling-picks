@@ -9,6 +9,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signout } from "../../actions";
+import PersonIcon from "@material-ui/icons/Person";
+import { Menu, MenuItem } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,11 +22,15 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  centerHeadline: {
+    textAlign: "center",
+  },
 }));
 
 const MyAppBar = ({ toggleDrawer }) => {
   const classes = useStyles();
   const [title, setTitle] = useState("");
+  const [menuAnchor, setMenuAnchor] = useState(null);
   const dispatch = useDispatch();
   let location = useLocation();
 
@@ -39,9 +45,23 @@ const MyAppBar = ({ toggleDrawer }) => {
     }
   }, [location]);
 
+  const handleClose = () => {
+    console.log("handleClose");
+    setMenuAnchor(null);
+  };
+
+  const handleClick = (e) => {
+    setMenuAnchor(e.currentTarget);
+  };
+
+  const handleSignOut = () => {
+    dispatch(signout());
+    handleClose();
+  };
+
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar className={classes.centerHeadline} position="static">
         <Toolbar>
           <IconButton
             edge="start"
@@ -55,11 +75,27 @@ const MyAppBar = ({ toggleDrawer }) => {
           <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
-          <Button color="inherit" onClick={() => dispatch(signout())}>
-            Sign out
+          <Button
+            aria-controls="profile-menu"
+            aria-haspopup="true"
+            color="inherit"
+            onClick={handleClick}
+          >
+            <PersonIcon />
           </Button>
         </Toolbar>
       </AppBar>
+      <Menu
+        id="profile-menu"
+        anchorEl={menuAnchor}
+        keepMounted
+        open={!!menuAnchor}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}>Settings</MenuItem>
+        <MenuItem onClick={handleSignOut}>Logout</MenuItem>
+      </Menu>
     </div>
   );
 };

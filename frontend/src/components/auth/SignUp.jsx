@@ -11,14 +11,14 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { signup } from "../../actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Gambling Picks
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -28,7 +28,7 @@ const Copyright = () => {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    paddingTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -46,6 +46,7 @@ const SignUp = () => {
   const classes = useStyles();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const errorMessage = useSelector((state) => state.auth.errorMessage);
   const dispatch = useDispatch();
 
   const submitLogin = () => {
@@ -86,6 +87,7 @@ const SignUp = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <div style={{ color: "red" }}>{errorMessage}</div>
         <Button
           fullWidth
           variant="contained"

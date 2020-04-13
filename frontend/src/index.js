@@ -9,6 +9,7 @@ import thunk from "redux-thunk";
 
 import App from "./App";
 import reducers from "./reducers";
+import { CssBaseline } from "@material-ui/core";
 
 const store = createStore(
   reducers,
@@ -19,6 +20,7 @@ const store = createStore(
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
+      <CssBaseline />
       <App />
     </BrowserRouter>
   </Provider>,

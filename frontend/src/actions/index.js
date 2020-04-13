@@ -7,7 +7,8 @@ export const signup = (username, password) => async (dispatch) => {
   });
 
   if (!response.ok) {
-    return dispatch({ type: AUTH_FAIL, payload: "Email in use" });
+    const data = await response.json();
+    return dispatch({ type: AUTH_FAIL, payload: data.error });
   }
   const data = await response.json();
   dispatch({
@@ -33,7 +34,7 @@ export const signin = (username, password) => async (dispatch) => {
   localStorage.setItem("token", data.token);
 };
 
-export const signout = () => async (dispatch) => {
-  dispatch({ type: USER_SIGNOUT });
+export const signout = () => {
   localStorage.removeItem("token");
+  return { type: USER_SIGNOUT };
 };

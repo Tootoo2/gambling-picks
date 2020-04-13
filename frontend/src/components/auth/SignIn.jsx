@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signin } from "../../actions";
 
 const Copyright = () => {
@@ -28,7 +28,7 @@ const Copyright = () => {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    paddingTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -47,6 +47,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const errorMessage = useSelector((state) => state.auth.errorMessage);
 
   const handleSignIn = () => {
     dispatch(signin(username, password));
@@ -88,6 +89,7 @@ const SignIn = () => {
           onChange={(e) => setPassword(e.target.value)}
           autoComplete="current-password"
         />
+        <div style={{ color: "red" }}>{errorMessage}</div>
         <Button
           type="submit"
           fullWidth
