@@ -1,4 +1,10 @@
-import { AUTH_USER, AUTH_FAIL, USER_SIGNOUT, FETCH_USER } from "./types";
+import {
+  AUTH_USER,
+  AUTH_FAIL,
+  USER_SIGNOUT,
+  FETCH_USER,
+  FETCH_CHAT,
+} from "./types";
 
 export const signup = (username, password) => async (dispatch) => {
   const response = await fetch("http://localhost:3090/signup", {
@@ -56,6 +62,27 @@ export const fetchUser = () => async (dispatch) => {
   const data = await response.json();
   dispatch({
     type: FETCH_USER,
+    payload: data,
+  });
+};
+
+export const fetchMessages = () => async (dispatch) => {
+  const response = await fetch("http://localhost:3090/chat", {
+    method: "GET",
+    headers: {
+      authorization: localStorage.getItem("token"),
+    },
+  });
+
+  if (!response.ok) {
+    console.log("bad message");
+    return;
+  }
+
+  const data = await response.json();
+
+  dispatch({
+    type: FETCH_CHAT,
     payload: data,
   });
 };

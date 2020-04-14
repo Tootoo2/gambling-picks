@@ -1,6 +1,6 @@
 const Message = require("../models/message");
 
-exports.getMessages = function (req, res, next) {
+exports.getMessages = (req, res, next) => {
   const sort = { timestamp: -1 };
 
   Message.find({}, function (err, result) {
@@ -14,11 +14,12 @@ exports.getMessages = function (req, res, next) {
     .limit(100);
 };
 
-exports.postMessage = function (req, res, next) {
-  const message = req.body.message;
+exports.postMessage = (req, res, next) => {
+  const { username, message } = req.body;
   if (!message) return res.json({ success: false });
 
   const newMessage = new Message({
+    username: username,
     message: message,
   });
 
