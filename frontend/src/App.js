@@ -13,10 +13,9 @@ import { fetchUser } from "./actions";
 function App() {
   const authenticated = useSelector((state) => state.auth.authenticated);
   const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(fetchUser());
-  }, []);
+    authenticated && dispatch(fetchUser());
+  }, [dispatch]);
 
   const AuthorizedRoutes = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);

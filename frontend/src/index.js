@@ -10,14 +10,6 @@ import thunk from "redux-thunk";
 import App from "./App";
 import reducers from "./reducers";
 import { CssBaseline } from "@material-ui/core";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import {
-  blue,
-  grey,
-  lightBlue,
-  orange,
-  blueGrey,
-} from "@material-ui/core/colors";
 
 const store = createStore(
   reducers,
@@ -25,29 +17,11 @@ const store = createStore(
   applyMiddleware(thunk)
 );
 
-const theme = createMuiTheme({
-  palette: {
-    primary: orange,
-    secondary: lightBlue,
-  },
-});
-const themeDark = createMuiTheme({
-  palette: {
-    primary: blueGrey,
-    secondary: lightBlue,
-    type: "dark",
-  },
-});
-
-console.log(themeDark);
-
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <ThemeProvider theme={themeDark}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
+      <CssBaseline />
+      <App />
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")

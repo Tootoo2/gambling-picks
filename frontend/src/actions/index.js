@@ -16,6 +16,7 @@ export const signup = (username, password) => async (dispatch) => {
     payload: data.token,
   });
   localStorage.setItem("token", data.token);
+  dispatch(fetchUser());
 };
 export const signin = (username, password) => async (dispatch) => {
   const response = await fetch("http://localhost:3090/signin", {
@@ -32,6 +33,7 @@ export const signin = (username, password) => async (dispatch) => {
     payload: data.token,
   });
   localStorage.setItem("token", data.token);
+  dispatch(fetchUser());
 };
 
 export const signout = () => {
