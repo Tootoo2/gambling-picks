@@ -13,9 +13,6 @@ import PersonIcon from "@material-ui/icons/Person";
 import { Menu, MenuItem } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -60,7 +57,7 @@ const MyAppBar = ({ toggleDrawer }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar className={classes.centerHeadline} position="static">
         <Toolbar>
           <IconButton
