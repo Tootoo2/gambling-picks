@@ -2,7 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMessages, sendMessage } from "../actions";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, TextField, Button } from "@material-ui/core";
+import {
+  Container,
+  TextField,
+  Button,
+  InputAdornment,
+} from "@material-ui/core";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker, Emoji } from "emoji-mart";
 
 import socket from "socket.io-client";
 
@@ -41,6 +48,7 @@ const Chat = () => {
   const username = useSelector((state) => state.user.username);
   const [newMessage, setNewMessage] = useState("");
   const [socketMessage, setSocketMessage] = useState([]);
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
 
   const messagesEndRef = useRef(null);
 
@@ -51,7 +59,6 @@ const Chat = () => {
   useEffect(() => {
     const io = socket("http://localhost:3090");
     io.on("postMessage", (data) => {
-      console.log(data);
       setSocketMessage((prev) => [...prev, data]);
     });
   }, []);
@@ -67,6 +74,20 @@ const Chat = () => {
   const handleMessage = () => {
     dispatch(sendMessage(username, newMessage));
     setNewMessage("");
+  };
+
+  const handleKeyPress = (e) => {
+    e.key === "Enter" && handleMessage();
+  };
+
+  const toggleEmoji = () => {
+    setIsEmojiOpen((prev) => !prev);
+  };
+
+  const selectEmoji = (e) => {
+    console.log(e.id);
+    setNewMessage((prev) => prev + e.native);
+    setIsEmojiOpen(false);
   };
 
   const RenderMessages = () => {
@@ -110,12 +131,34 @@ const Chat = () => {
         <TextField
           className={classes.text}
           variant="outlined"
+          placeholder="Compose your message and hit ENTER to send"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Emoji
+                  emoji="grinning"
+                  size={24}
+                  onClick={() => toggleEmoji()}
+                />
+              </InputAdornment>
+            ),
+          }}
         />
         <Button variant="contained" color="primary" onClick={handleMessage}>
           Send
         </Button>
+        {isEmojiOpen && (
+          <Picker
+            native={true}
+            style={{ position: "absolute", bottom: "20px", right: "20px" }}
+            title="Pick your emoji…"
+            emoji="point_up"
+            onSelect={selectEmoji}
+          />
+        )}
       </div>
     </Container>
   );
