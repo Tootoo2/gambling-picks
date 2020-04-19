@@ -1,4 +1,5 @@
 const Message = require("../models/message");
+const io = require("../socket");
 
 exports.getMessages = (req, res, next) => {
   const sort = { timestamp: -1 };
@@ -27,6 +28,9 @@ exports.postMessage = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.json({ success: true });
   });
+
+  io.getIO().emit("postMessage", newMessage);
+
+  res.json({ success: true });
 };

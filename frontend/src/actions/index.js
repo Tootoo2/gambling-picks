@@ -86,3 +86,16 @@ export const fetchMessages = () => async (dispatch) => {
     payload: data,
   });
 };
+
+export const sendMessage = (username, message) => async (dispatch) => {
+  const response = await fetch("http://localhost:3090/message", {
+    method: "POST",
+    body: JSON.stringify({ username, message }),
+  });
+
+  if (!response.ok) {
+    console.log("failed sending msg");
+    return;
+  }
+  // temp to see if it works
+};

@@ -1,20 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMessages } from "../actions";
+import { fetchMessages, sendMessage } from "../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, TextField, Button } from "@material-ui/core";
+
+import socket from "socket.io-client";
 
 import Message from "./Message.jsx";
 
 const useStyles = makeStyles((theme) => ({
   chatContainer: {
-    height: "calc(100vh - 64px)",
+    flex: 1,
+    minHeight: "0px",
+    display: "flex",
+    flexDirection: "column",
+    border: "1px solid black",
   },
-  messages: { height: "80%" },
+  messages: {
+    flex: 1,
+    overflowY: "auto",
+  },
   send: {
     display: "flex",
     justifyContent: "space-around",
-    marginTop: "24px",
+    margin: "24px",
+  },
+  reverseColumn: {
+    display: "flex",
+    flexDirection: "column-reverse",
   },
   text: {
     width: "100%",
@@ -25,20 +38,43 @@ const Chat = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const messages = useSelector((state) => state.messages);
+  const username = useSelector((state) => state.user.username);
   const [newMessage, setNewMessage] = useState("");
+  const [socketMessage, setSocketMessage] = useState([]);
 
   useEffect(() => {
     dispatch(fetchMessages());
   }, [dispatch]);
 
+  useEffect(() => {
+    const io = socket("http://localhost:3090");
+    io.on("postMessage", (data) => {
+      console.log(data);
+      setSocketMessage((prev) => [...prev, data]);
+    });
+  }, []);
+
   const handleMessage = () => {
-    console.log(newMessage);
+    dispatch(sendMessage(username, newMessage));
+    setNewMessage("");
   };
 
   const RenderMessages = () => {
     if (!messages.messages) return null;
     return messages.messages.map((mess) => (
       <Message
+        key={mess.timestamp}
+        username={mess.username}
+        message={mess.message}
+        timestamp={mess.timestamp}
+      />
+    ));
+  };
+
+  const RenderSocketMessages = () => {
+    return socketMessage.map((mess) => (
+      <Message
+        key={mess.timestamp}
         username={mess.username}
         message={mess.message}
         timestamp={mess.timestamp}
@@ -49,7 +85,14 @@ const Chat = () => {
   return (
     <Container className={classes.chatContainer} maxWidth="lg">
       <div className={classes.messages}>
-        <RenderMessages />
+        <div className={classes.reverseColumn}>
+          <div>
+            <RenderSocketMessages />
+          </div>
+          <div className={classes.reverseColumn}>
+            <RenderMessages />
+          </div>
+        </div>
       </div>
 
       <div className={classes.send}>
