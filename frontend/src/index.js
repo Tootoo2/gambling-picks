@@ -6,10 +6,18 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import App from "./App";
 import reducers from "./reducers";
 import { CssBaseline } from "@material-ui/core";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: "#D7CCC8" },
+    secondary: { main: "#B0BEC5" },
+  },
+});
 
 const store = createStore(
   reducers,
@@ -20,8 +28,10 @@ const store = createStore(
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <CssBaseline />
-      <App />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")

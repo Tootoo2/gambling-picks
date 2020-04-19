@@ -39,6 +39,15 @@ const useStyles = makeStyles((theme) => ({
   text: {
     width: "100%",
   },
+  backdrop: {
+    zIndex: 5,
+    height: "100%",
+    width: "100%",
+    top: 0,
+    left: 0,
+    position: "fixed",
+    background: "rgba(0, 0, 0, .2)",
+  },
 }));
 
 const Chat = () => {
@@ -115,6 +124,9 @@ const Chat = () => {
 
   return (
     <Container className={classes.chatContainer} maxWidth="lg">
+      {isEmojiOpen && (
+        <div className={classes.backdrop} onClick={() => toggleEmoji()} />
+      )}
       <div className={classes.messages}>
         <div className={classes.reverseColumn}>
           <div>
@@ -138,11 +150,7 @@ const Chat = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Emoji
-                  emoji="grinning"
-                  size={24}
-                  onClick={() => toggleEmoji()}
-                />
+                <Emoji emoji="smile" size={24} onClick={() => toggleEmoji()} />
               </InputAdornment>
             ),
           }}
@@ -153,7 +161,12 @@ const Chat = () => {
         {isEmojiOpen && (
           <Picker
             native={true}
-            style={{ position: "absolute", bottom: "20px", right: "20px" }}
+            style={{
+              zIndex: 10,
+              position: "absolute",
+              bottom: "20px",
+              right: "20px",
+            }}
             title="Pick your emoji…"
             emoji="point_up"
             onSelect={selectEmoji}

@@ -11,16 +11,21 @@ import { useDispatch } from "react-redux";
 import { signout } from "../../actions";
 import PersonIcon from "@material-ui/icons/Person";
 import { Menu, MenuItem } from "@material-ui/core";
+import GPlogo from "../../assets/gp.png";
 
 const useStyles = makeStyles((theme) => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
+  menuButton: {},
   title: {
     flexGrow: 1,
   },
   centerHeadline: {
     textAlign: "center",
+  },
+  logo: {
+    height: "64px",
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
 }));
 
@@ -43,7 +48,6 @@ const MyAppBar = ({ toggleDrawer }) => {
   }, [location]);
 
   const handleClose = () => {
-    console.log("handleClose");
     setMenuAnchor(null);
   };
 
@@ -69,6 +73,7 @@ const MyAppBar = ({ toggleDrawer }) => {
           >
             <MenuIcon />
           </IconButton>
+          <img src={GPlogo} alt="logo" className={classes.logo} />
           <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
