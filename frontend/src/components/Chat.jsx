@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMessages, sendMessage } from "../actions";
 import { makeStyles } from "@material-ui/core/styles";
@@ -14,11 +14,11 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "0px",
     display: "flex",
     flexDirection: "column",
-    border: "1px solid black",
   },
   messages: {
     flex: 1,
     overflowY: "auto",
+    // scrollbarWidth: "none",
   },
   send: {
     display: "flex",
@@ -42,6 +42,8 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
   const [socketMessage, setSocketMessage] = useState([]);
 
+  const messagesEndRef = useRef(null);
+
   useEffect(() => {
     dispatch(fetchMessages());
   }, [dispatch]);
@@ -53,6 +55,14 @@ const Chat = () => {
       setSocketMessage((prev) => [...prev, data]);
     });
   }, []);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView();
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, socketMessage]);
 
   const handleMessage = () => {
     dispatch(sendMessage(username, newMessage));
@@ -93,6 +103,7 @@ const Chat = () => {
             <RenderMessages />
           </div>
         </div>
+        <div ref={messagesEndRef} />
       </div>
 
       <div className={classes.send}>
